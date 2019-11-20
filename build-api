@@ -1,0 +1,4 @@
+#!/bin/bash
+widdershins --language_tabs 'javascript--nodejs:Node.js' 'javascript:Javascript' --summary ./openapi.yaml -o ./source/index.html.md
+node shins.js --minify
+npm run start

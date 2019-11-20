@@ -1,0 +1,275 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: Emma API - App
+  description: API specification for the Emma App.
+servers:
+  - url: https://emma-app.com
+  
+
+paths:
+  /accounts/{accountId}:
+    get:
+      tags: 
+        - 'Account'
+      summary: Gets a specified user bank account.
+
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+
+      responses:
+        200:
+          description: A bank account object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        404:
+          description: Account does not exist.
+        500:
+          $ref: '#/components/responses/Standard500ErrorResponse'
+
+  /accounts/{accountId}/edit:
+    post:
+      tags:
+        - Account
+      summary: Edit a specified user bank account.
+
+      parameters:
+        - $ref: '#/components/parameters/accountId'
+      requestBody:
+        description: Various bank account edits.
+        content:  
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+              
+      responses:
+        204:
+          description: Succesfully editted account.
+        400:
+          description: Could not edit.
+        500:
+          $ref: '#/components/responses/Standard500ErrorResponse'
+          
+  /accounts:
+    patch:
+      tags: 
+        - Account
+      summary: Toggle accounts' isHidden property.
+      
+      requestBody:
+        description: Account hidden edits.
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountEdits
+              properties:
+                accountEdits:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AccountEdit'
+
+      responses:
+        200:
+          $ref: '#/components/responses/Standard200SuccessResponse'
+          
+    post:
+      tags:
+        - Account
+      summary: Used to create a new manual Account.
+      
+      requestBody:
+        description: Information related to new manual account to create.
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - type
+              properties:
+                name:
+                  type: string
+                  description: New Account name.
+                type:
+                  $ref: '#/components/schemas/AccountType'
+
+components:
+  schemas:
+    AccountEdit:
+      required:
+        - id
+        - isHidden
+      properties:
+        id:
+          type: integer
+        isHidden:
+          type: boolean
+  
+    AccountBalance:
+      required:
+        - currency
+        - postedBalance
+      properties:
+        currency:
+          type: string
+        postedBalance:
+          type: number
+        availableBalance:
+          type: number
+        overdraftLimit:
+          type: number
+        leftFromOverdraft:
+          type: number
+        creditCardBalance:
+          type: number
+        creditLimit:
+          type: number
+        
+    Account:
+      required:
+        - id
+        - userId
+        - provider
+        - name
+        - postedBalance
+        - currency
+        - type
+        - hasBalanceHistory
+        - isClosed
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        bankConnectionId:
+          type: integer
+        provider:
+          $ref: '#/components/schemas/Provider'
+        name:
+          type: string
+        availableBalance:
+          type: number
+        postedBalance:
+          type: number
+        creditCardBalance:
+          type: number
+        currency:
+          type: string
+        type:
+          $ref: '#/components/schemas/AccountType'
+        isHidden:
+          type: boolean
+        iban:
+          type: string
+        swiftBic:
+          type: string
+        accountNumber:
+          type: string
+        sortCode:
+          type: string
+        overdraftLimit:
+          type: number
+        creditLimit:
+          type: number
+        isOverdrawn:
+          type: boolean
+        leftFromOverdraft:
+          type: number
+        hasBalanceHistory:
+          type: boolean
+        transactionsCount:
+          type: integer
+        isClosed:
+          type: boolean
+        nativeBalance:
+          $ref: "#/components/schemas/AccountBalance"
+        iconUrl:
+          type: string
+    
+    Error:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+
+    Provider:
+      type: string
+      enum:
+        - TRUELAYER
+        - SALTEDGE
+        - MONZO
+        - STARLING
+        - PAYPAL
+        - BINANCE
+        - BITFINEX
+        - BITTREX
+        - KRAKEN
+        - BITSTAMP
+        - BLOCKEXPLORER
+        - BLOCKCHAINDOTCOM
+        - BLOCKCYPHERETH
+        - ETHERSCAN
+        - COINBASE
+        - WEALTHSIMPLE
+        - PENSIONBEE
+        - CHIP
+        - PLAID
+        - MANUAL
+        - DUMMY
+        - SPLIT
+        
+    AccountType:
+      type: string
+      enum:
+        - CHECKING
+        - SAVINGS
+        - CREDITCARD
+        - CRYPTO
+        - INVESTMENT
+        - PENSION
+        - LOAN
+        - BUSINESS_CHECKING
+        - BUSINESS_SAVINGS
+        - CHIP_GOAL
+        - OTHER
+        - HIDDEN
+
+  responses:
+    Standard500ErrorResponse:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Standard200SuccessResponse:
+      description: Standard 200 success response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: 'Success'
+        
+      
+  parameters:
+    accountId:
+      name: accountId
+      in: path
+      required: true
+      description: The account id.
+      schema:
+        type: integer
+        
+  tags:
+  - name: 'Account'
+    description: 'Bank Account inofrmation.'
+        
+      
