@@ -23,7 +23,9 @@ Base URLs:
 
 <h1 id="emma-api-app-account">Account</h1>
 
-## Gets a specified user bank account.
+Bank Account information.
+
+## Gets Bank Account.
 
 > Code samples
 
@@ -69,7 +71,7 @@ $.ajax({
 
 `GET /accounts/{accountId}`
 
-<h3 id="gets-a-specified-user-bank-account.-parameters">Parameters</h3>
+<h3 id="gets-bank-account.-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
@@ -116,19 +118,30 @@ $.ajax({
 }
 ```
 
-<h3 id="gets-a-specified-user-bank-account.-responses">Responses</h3>
+<h3 id="gets-bank-account.-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A bank account object.|[Account](#schemaaccount)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Account does not exist.|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal server error.|[Error](#schemaerror)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal server error.|Inline|
+
+<h3 id="gets-bank-account.-responseschema">Response Schema</h3>
+
+Status Code **500**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» statusCode|number|true|none|none|
+|» message|string|true|none|none|
+|» userMessage|string|false|none|none|
+|» name|string|false|none|none|
 
 <aside class="success">
 This operation does not require authentication
 </aside>
 
-## Edit a specified user bank account.
+## Edit Bank Account.
 
 > Code samples
 
@@ -248,7 +261,7 @@ $.ajax({
 }
 ```
 
-<h3 id="edit-a-specified-user-bank-account.-parameters">Parameters</h3>
+<h3 id="edit-bank-account.-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
@@ -261,24 +274,37 @@ $.ajax({
 
 ```json
 {
-  "code": "string",
-  "message": "string"
+  "statusCode": 0,
+  "message": "string",
+  "userMessage": "string",
+  "name": "string"
 }
 ```
 
-<h3 id="edit-a-specified-user-bank-account.-responses">Responses</h3>
+<h3 id="edit-bank-account.-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Succesfully editted account.|None|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Successfully edited account.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Could not edit.|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal server error.|[Error](#schemaerror)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal server error.|Inline|
+
+<h3 id="edit-bank-account.-responseschema">Response Schema</h3>
+
+Status Code **500**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» statusCode|number|true|none|none|
+|» message|string|true|none|none|
+|» userMessage|string|false|none|none|
+|» name|string|false|none|none|
 
 <aside class="success">
 This operation does not require authentication
 </aside>
 
-## Toggle accounts' isHidden property.
+## Toggle Account isHidden.
 
 > Code samples
 
@@ -346,7 +372,7 @@ $.ajax({
 }
 ```
 
-<h3 id="toggle-accounts'-ishidden-property.-parameters">Parameters</h3>
+<h3 id="toggle-account-ishidden.-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
@@ -365,13 +391,13 @@ $.ajax({
 }
 ```
 
-<h3 id="toggle-accounts'-ishidden-property.-responses">Responses</h3>
+<h3 id="toggle-account-ishidden.-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Standard 200 success response.|Inline|
 
-<h3 id="toggle-accounts'-ishidden-property.-responseschema">Response Schema</h3>
+<h3 id="toggle-account-ishidden.-responseschema">Response Schema</h3>
 
 Status Code **200**
 
@@ -383,7 +409,7 @@ Status Code **200**
 This operation does not require authentication
 </aside>
 
-## Used to create a new manual Account.
+## Create Manual Account.
 
 > Code samples
 
@@ -391,10 +417,13 @@ This operation does not require authentication
 const fetch = require('node-fetch');
 const inputBody = '{
   "name": "string",
-  "type": "CHECKING"
+  "type": "CHECKING",
+  "balance": 0,
+  "currency": "string"
 }';
 const headers = {
-  'Content-Type':'application/json'
+  'Content-Type':'application/json',
+  'Accept':'application/json'
 
 };
 
@@ -414,7 +443,8 @@ fetch('https://emma-app.com/accounts',
 
 ```javascript
 var headers = {
-  'Content-Type':'application/json'
+  'Content-Type':'application/json',
+  'Accept':'application/json'
 
 };
 
@@ -437,17 +467,21 @@ $.ajax({
 ```json
 {
   "name": "string",
-  "type": "CHECKING"
+  "type": "CHECKING",
+  "balance": 0,
+  "currency": "string"
 }
 ```
 
-<h3 id="used-to-create-a-new-manual-account.-parameters">Parameters</h3>
+<h3 id="create-manual-account.-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|object|false|Information related to new manual account to create.|
 |» name|body|string|true|New Account name.|
-|» type|body|[AccountType](#schemaaccounttype)|true|none|
+|» type|body|string|true|none|
+|» balance|body|number|true|Posted balance of manual account.|
+|» currency|body|string|false|Currency of the account (Defaults to user's primary currency).|
 
 #### Enumerated Values
 
@@ -466,10 +500,52 @@ $.ajax({
 |» type|OTHER|
 |» type|HIDDEN|
 
-<h3 id="used-to-create-a-new-manual-account.-responses">Responses</h3>
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "id": 0,
+  "userId": 0,
+  "bankConnectionId": 0,
+  "provider": "TRUELAYER",
+  "name": "string",
+  "availableBalance": 0,
+  "postedBalance": 0,
+  "creditCardBalance": 0,
+  "currency": "string",
+  "type": "CHECKING",
+  "isHidden": true,
+  "iban": "string",
+  "swiftBic": "string",
+  "accountNumber": "string",
+  "sortCode": "string",
+  "overdraftLimit": 0,
+  "creditLimit": 0,
+  "isOverdrawn": true,
+  "leftFromOverdraft": 0,
+  "hasBalanceHistory": true,
+  "transactionsCount": 0,
+  "isClosed": true,
+  "nativeBalance": {
+    "currency": "string",
+    "postedBalance": 0,
+    "availableBalance": 0,
+    "overdraftLimit": 0,
+    "leftFromOverdraft": 0,
+    "creditCardBalance": 0,
+    "creditLimit": 0
+  },
+  "iconUrl": "string"
+}
+```
+
+<h3 id="create-manual-account.-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|New Manual Account.|[Account](#schemaaccount)|
 
 <aside class="success">
 This operation does not require authentication
@@ -495,35 +571,6 @@ This operation does not require authentication
 |---|---|---|---|---|
 |id|integer|true|none|none|
 |isHidden|boolean|true|none|none|
-
-<h2 id="tocSaccountbalance">AccountBalance</h2>
-
-<a id="schemaaccountbalance"></a>
-
-```json
-{
-  "currency": "string",
-  "postedBalance": 0,
-  "availableBalance": 0,
-  "overdraftLimit": 0,
-  "leftFromOverdraft": 0,
-  "creditCardBalance": 0,
-  "creditLimit": 0
-}
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|currency|string|true|none|none|
-|postedBalance|number|true|none|none|
-|availableBalance|number|false|none|none|
-|overdraftLimit|number|false|none|none|
-|leftFromOverdraft|number|false|none|none|
-|creditCardBalance|number|false|none|none|
-|creditLimit|number|false|none|none|
 
 <h2 id="tocSaccount">Account</h2>
 
@@ -574,13 +621,13 @@ This operation does not require authentication
 |id|integer|true|none|none|
 |userId|integer|true|none|none|
 |bankConnectionId|integer|false|none|none|
-|provider|[Provider](#schemaprovider)|true|none|none|
+|provider|string|true|none|none|
 |name|string|true|none|none|
 |availableBalance|number|false|none|none|
 |postedBalance|number|true|none|none|
 |creditCardBalance|number|false|none|none|
 |currency|string|true|none|none|
-|type|[AccountType](#schemaaccounttype)|true|none|none|
+|type|string|true|none|none|
 |isHidden|boolean|false|none|none|
 |iban|string|false|none|none|
 |swiftBic|string|false|none|none|
@@ -593,99 +640,52 @@ This operation does not require authentication
 |hasBalanceHistory|boolean|true|none|none|
 |transactionsCount|integer|false|none|none|
 |isClosed|boolean|true|none|none|
-|nativeBalance|[AccountBalance](#schemaaccountbalance)|false|none|none|
+|nativeBalance|object|false|none|none|
+|» currency|string|true|none|none|
+|» postedBalance|number|true|none|none|
+|» availableBalance|number|false|none|none|
+|» overdraftLimit|number|false|none|none|
+|» leftFromOverdraft|number|false|none|none|
+|» creditCardBalance|number|false|none|none|
+|» creditLimit|number|false|none|none|
 |iconUrl|string|false|none|none|
 
-<h2 id="tocSerror">Error</h2>
-
-<a id="schemaerror"></a>
-
-```json
-{
-  "code": "string",
-  "message": "string"
-}
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|code|string|false|none|none|
-|message|string|false|none|none|
-
-<h2 id="tocSprovider">Provider</h2>
-
-<a id="schemaprovider"></a>
-
-```json
-"TRUELAYER"
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|none|
-
 #### Enumerated Values
 
 |Property|Value|
 |---|---|
-|*anonymous*|TRUELAYER|
-|*anonymous*|SALTEDGE|
-|*anonymous*|MONZO|
-|*anonymous*|STARLING|
-|*anonymous*|PAYPAL|
-|*anonymous*|BINANCE|
-|*anonymous*|BITFINEX|
-|*anonymous*|BITTREX|
-|*anonymous*|KRAKEN|
-|*anonymous*|BITSTAMP|
-|*anonymous*|BLOCKEXPLORER|
-|*anonymous*|BLOCKCHAINDOTCOM|
-|*anonymous*|BLOCKCYPHERETH|
-|*anonymous*|ETHERSCAN|
-|*anonymous*|COINBASE|
-|*anonymous*|WEALTHSIMPLE|
-|*anonymous*|PENSIONBEE|
-|*anonymous*|CHIP|
-|*anonymous*|PLAID|
-|*anonymous*|MANUAL|
-|*anonymous*|DUMMY|
-|*anonymous*|SPLIT|
-
-<h2 id="tocSaccounttype">AccountType</h2>
-
-<a id="schemaaccounttype"></a>
-
-```json
-"CHECKING"
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|none|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|*anonymous*|CHECKING|
-|*anonymous*|SAVINGS|
-|*anonymous*|CREDITCARD|
-|*anonymous*|CRYPTO|
-|*anonymous*|INVESTMENT|
-|*anonymous*|PENSION|
-|*anonymous*|LOAN|
-|*anonymous*|BUSINESS_CHECKING|
-|*anonymous*|BUSINESS_SAVINGS|
-|*anonymous*|CHIP_GOAL|
-|*anonymous*|OTHER|
-|*anonymous*|HIDDEN|
+|provider|TRUELAYER|
+|provider|SALTEDGE|
+|provider|MONZO|
+|provider|STARLING|
+|provider|PAYPAL|
+|provider|BINANCE|
+|provider|BITFINEX|
+|provider|BITTREX|
+|provider|KRAKEN|
+|provider|BITSTAMP|
+|provider|BLOCKEXPLORER|
+|provider|BLOCKCHAINDOTCOM|
+|provider|BLOCKCYPHERETH|
+|provider|ETHERSCAN|
+|provider|COINBASE|
+|provider|WEALTHSIMPLE|
+|provider|PENSIONBEE|
+|provider|CHIP|
+|provider|PLAID|
+|provider|MANUAL|
+|provider|DUMMY|
+|provider|SPLIT|
+|type|CHECKING|
+|type|SAVINGS|
+|type|CREDITCARD|
+|type|CRYPTO|
+|type|INVESTMENT|
+|type|PENSION|
+|type|LOAN|
+|type|BUSINESS_CHECKING|
+|type|BUSINESS_SAVINGS|
+|type|CHIP_GOAL|
+|type|OTHER|
+|type|HIDDEN|
 
